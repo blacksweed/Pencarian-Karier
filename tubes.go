@@ -8,13 +8,14 @@ type keahlian struct {
 	nama, jenis string
 }
 
-// Struktur untuk menyimpan data karier
+
 type Karier struct {
 	Nama               string
 	Industri           string
 	KeahlianDibutuhkan []string
 	GajiRataRata       int
 }
+
 
 var daftarKeahlian []keahlian
 
@@ -42,6 +43,7 @@ var daftarKarier = []Karier{
 	{"Network Engineer", "Teknologi", []string{"jaringan", "cisco", "tcp/ip"}, 11000000},
 }
 
+
 func showMenu() {
 	fmt.Println("\n============ MENU UTAMA ============ ")
 	fmt.Println("1. Tambah minat / keahlian")
@@ -49,22 +51,22 @@ func showMenu() {
 	fmt.Println("3. Edit Data Keahlian")
 	fmt.Println("4. Hapus Data Keahlian")
 	fmt.Println("5. Rekomendasi Karier")
-	fmt.Println("6. Pencarian Karier (Linear Search)") // Diubah dari Binary Search
+	fmt.Println("6. Pencarian Karier (Linear Search)")
 	fmt.Println("7. Urutkan Karier Berdasarkan Gaji (Terendah ke Tertinggi)")
 	fmt.Println("8. Filter Karier berdasarkan Industri (Exact Match)")
-	fmt.Println("9. Keluar")
-	fmt.Print("Pilih menu (1-9): ")
+	fmt.Println("9. Tampilkan Karier Gaji Tertinggi") // Teks menu disesuaikan
+	fmt.Println("10. Keluar")
+	fmt.Print("Pilih menu (1-10): ")
 }
-
 
 func tambahKeahlian() {
 	var namaInput, jenisInput string
 
 	fmt.Print("Masukkan nama minat/keahlian: ")
-	fmt.Scanln(&namaInput) 
+	fmt.Scanln(&namaInput)
 
 	fmt.Print("Masukkan jenis keahlian (contoh: teknis, interpersonal, kreatif): ")
-	fmt.Scanln(&jenisInput) 
+	fmt.Scanln(&jenisInput)
 
 	if namaInput == "" || jenisInput == "" {
 		fmt.Println("Input tidak boleh kosong. Harap masukkan nama dan jenis keahlian.")
@@ -88,15 +90,16 @@ func tampilKeahlian() {
 	}
 }
 
+
 func editKeahlian() {
-	tampilKeahlian() 
+	tampilKeahlian()
 	if len(daftarKeahlian) == 0 {
-		return 
+		return
 	}
 
 	var index int
 	fmt.Print("Masukkan nomor data yang ingin diubah: ")
-	_, err := fmt.Scanln(&index) 
+	_, err := fmt.Scanln(&index)
 	if err != nil || index < 1 || index > len(daftarKeahlian) {
 		fmt.Println("Nomor tidak valid. Pastikan nomor sesuai dengan daftar.")
 		return
@@ -152,19 +155,16 @@ func rekomendasiKarier() {
 	for _, karier := range daftarKarier {
 		cocokLokal := 0
 		for _, keahlianUser := range daftarKeahlian {
-			
 			for _, keahlianKarier := range karier.KeahlianDibutuhkan {
-			
 				if keahlianUser.nama == keahlianKarier {
 					cocokLokal++
-					break 
+					break
 				}
 			}
 		}
 
 		if cocokLokal > 0 && len(karier.KeahlianDibutuhkan) > 0 {
 			totalCocokGlobal++
-		
 			persen := (float64(cocokLokal) / float64(len(karier.KeahlianDibutuhkan))) * 100
 			fmt.Printf("Karier: %-20s | Industri: %-15s | Gaji: Rp%d | Kecocokan: %.0f%%\n",
 				karier.Nama, karier.Industri, karier.GajiRataRata, persen)
@@ -189,7 +189,6 @@ func urutkanKarierBerdasarkanGaji() {
 				minIndex = j
 			}
 		}
-	
 		karierUntukDiurut[i], karierUntukDiurut[minIndex] = karierUntukDiurut[minIndex], karierUntukDiurut[i]
 	}
 
@@ -209,11 +208,10 @@ func linearSearchKarier() {
 		fmt.Println("Nama karier tidak boleh kosong.")
 		return
 	}
-	
+
 	fmt.Println("\n--- HASIL PENCARIAN ---")
 	found := false
 	for _, k := range daftarKarier {
-	
 		if k.Nama == targetNamaKarier {
 			fmt.Printf("Ditemukan: Karier: %-20s | Industri: %-15s | Gaji: Rp%d\n",
 				k.Nama, k.Industri, k.GajiRataRata)
@@ -225,6 +223,7 @@ func linearSearchKarier() {
 		fmt.Println("Karier dengan nama '"+targetNamaKarier+"' tidak ditemukan.")
 	}
 }
+
 
 func filterIndustri() {
 	var targetIndustri string
@@ -239,7 +238,6 @@ func filterIndustri() {
 	fmt.Println("\n--- HASIL FILTER BERDASARKAN INDUSTRI:", targetIndustri, "---")
 	found := false
 	for _, k := range daftarKarier {
-	
 		if k.Industri == targetIndustri {
 			fmt.Printf("Karier: %-20s | Gaji: Rp%d\n", k.Nama, k.GajiRataRata)
 			found = true
@@ -251,17 +249,48 @@ func filterIndustri() {
 	}
 }
 
-func main() {
 
+func tampilkanNilaiEkstrimGaji() {
+	if len(daftarKarier) == 0 {
+		fmt.Println("Daftar karier kosong, tidak ada gaji tertinggi untuk ditampilkan.")
+		return
+	}
+
+	var karierGajiMax []Karier
+
+	
+	maxGaji := daftarKarier[0].GajiRataRata
+	karierGajiMax = append(karierGajiMax, daftarKarier[0]) 
+
+	
+		karierSaatIni := daftarKarier[i]
+
+		
+		if karierSaatIni.GajiRataRata > maxGaji {
+			maxGaji = karierSaatIni.GajiRataRata
+			karierGajiMax = []Karier{karierSaatIni} 
+		} else if karierSaatIni.GajiRataRata == maxGaji {
+			karierGajiMax = append(karierGajiMax, karierSaatIni) 
+		}
+	}
+
+	fmt.Println("\n========== KARIER DENGAN GAJI TERTINGGI ==========")
+	fmt.Printf("\nKARIER DENGAN GAJI TERTINGGI (Rp%d):\n", maxGaji)
+	for _, k := range karierGajiMax {
+		fmt.Printf("- %s (Industri: %s)\n", k.Nama, k.Industri)
+	}
+}
+
+
+func main() {
 	var pilihan string
 	for {
 		showMenu()
-		_, err := fmt.Scanln(&pilihan) 
+		_, err := fmt.Scanln(&pilihan)
 		if err != nil {
 			fmt.Println("Input tidak valid, coba lagi.")
 			continue
 		}
-
 
 		switch pilihan {
 		case "1":
@@ -275,16 +304,18 @@ func main() {
 		case "5":
 			rekomendasiKarier()
 		case "6":
-			linearSearchKarier() 
+			linearSearchKarier()
 		case "7":
 			urutkanKarierBerdasarkanGaji()
 		case "8":
 			filterIndustri()
 		case "9":
+			tampilkanNilaiEkstrimGaji() 
+		case "10":
 			fmt.Println("Program selesai. Sampai jumpa!")
-			return 
+			return
 		default:
-			fmt.Println("Pilihan tidak valid. Silakan masukkan angka antara 1-9.")
+			fmt.Println("Pilihan tidak valid. Silakan masukkan angka antara 1-10.")
 		}
 	}
 }
